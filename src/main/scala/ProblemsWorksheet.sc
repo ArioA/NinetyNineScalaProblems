@@ -181,7 +181,7 @@ def encode[T](theList: List[T]) : List[(Int, T)] = {
   encodeTailRec(packedList, List.empty).reverse
 }
 
-pack(List('a','b','c','d','e'))
-pack(List(1,1,1,2,2,2,3,3,4,4,5,5,6,7,8,8,8,8,8,9))
-pack(List.empty)
-pack(List(1,1,2,2,1,1,2,2,1,1,2,2,1,1,2,2,3,3,3,3,1,1,3))
+encode(List('a','b','c','d','e'))
+encode(List(1,1,1,2,2,2,3,3,4,4,5,5,6,7,8,8,8,8,8,9))
+encode(List.empty)
+encode(List(1,1,2,2,1,1,2,2,1,1,2,2,1,1,2,2,3,3,3,3,1,1,3))
