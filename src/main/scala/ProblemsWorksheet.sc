@@ -96,3 +96,30 @@ def reverse[T](theList : List[T]) : List[T] = {
 reverse(List(1,2,3,4))
 reverse(List())
 reverse(List('a'))
+
+def isPalindrome[T](theList: List[T]) : Boolean = {
+  val reversedList: List[T] = reverse(theList)
+  reversedList match {
+    case `theList` => true
+    case _ => false
+  }
+}
+
+isPalindrome(List(1, 2, 3, 2, 1))
+isPalindrome(List('a','b','c'))
+
+def flatten(listOfLists: List[Any]): List[Any] = {
+
+
+  def flattenTailRec(lists: List[Any], accumulatorList: List[Any]): List[Any] = {
+      lists match {
+        case Nil => accumulatorList
+        case (x:List[Any]):: xs => flattenTailRec(xs, flattenTailRec(x, accumulatorList))
+        case x :: xs => flattenTailRec(xs, x :: accumulatorList)
+      }
+    }
+
+  flattenTailRec(listOfLists, List.empty).reverse
+  }
+
+flatten(List(List(1,2,List(3)),List(4,5,6)))
