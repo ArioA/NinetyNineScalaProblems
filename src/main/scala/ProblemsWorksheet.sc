@@ -114,8 +114,8 @@ def flatten(listOfLists: List[Any]): List[Any] = {
   def flattenTailRec(lists: List[Any], accumulatorList: List[Any]): List[Any] = {
       lists match {
         case Nil => accumulatorList
-        case (x:List[Any]):: xs => flattenTailRec(xs, flattenTailRec(x, accumulatorList))
-        case x :: xs => flattenTailRec(xs, x :: accumulatorList)
+        case (head:List[Any]):: tail => flattenTailRec(tail, flattenTailRec(head, accumulatorList))
+        case head :: tail => flattenTailRec(tail, head :: accumulatorList)
       }
     }
 
@@ -123,3 +123,65 @@ def flatten(listOfLists: List[Any]): List[Any] = {
   }
 
 flatten(List(List(1,2,List(3)),List(4,5,6)))
+
+def compress[T](theList: List[T]) : List[T] = {
+  if(theList.isEmpty)
+    return theList
+
+  @tailrec
+  def compressTailRec(duplicateList: List[T], accList: List[T]) : List[T] = {
+    duplicateList match {
+      case Nil => accList
+      case head :: tail if head == accList.head => compressTailRec(tail, accList)
+      case head :: tail => compressTailRec(tail, head :: accList)
+    }
+  }
+
+  compressTailRec(theList, List(theList.head)).reverse
+}
+
+compress(List('a','b','c','d','e'))
+compress(List(1,1,1,2,2,2,3,3,4,4,5,5,6,7,8,8,8,8,8,9))
+compress(List.empty)
+compress(List(1,1,2,2,1,1,2,2,1,1,2,2,1,1,2,2,3,3,3,3,1,1,3))
+
+def pack[T](theList: List[T]) : List[List[T]] = {
+  if(theList isEmpty)
+    return List.empty
+
+  @tailrec
+  def packTailRec(originalList: List[T], accList: List[List[T]]) : List[List[T]] = {
+    originalList match {
+      case Nil => accList
+      case head :: tail if head == accList.head.head => packTailRec(tail, (head :: accList.head) :: accList.tail)
+      case head :: tail => packTailRec(tail, List(head) :: accList)
+    }
+  }
+
+  packTailRec(theList.tail, List(List(theList.head))).reverse
+}
+
+pack(List('a','b','c','d','e'))
+pack(List(1,1,1,2,2,2,3,3,4,4,5,5,6,7,8,8,8,8,8,9))
+pack(List.empty)
+pack(List(1,1,2,2,1,1,2,2,1,1,2,2,1,1,2,2,3,3,3,3,1,1,3))
+
+def encode[T](theList: List[T]) : List[(Int, T)] = {
+
+  val packedList : List[List[T]] = pack(theList)
+
+  @tailrec
+  def encodeTailRec(packed: List[List[T]], accList: List[(Int, T)]): List[(Int, T)] = {
+    packed match {
+      case Nil => accList
+      case head :: tail => encodeTailRec(tail, (head.length, head.head) :: accList)
+    }
+  }
+
+  encodeTailRec(packedList, List.empty).reverse
+}
+
+pack(List('a','b','c','d','e'))
+pack(List(1,1,1,2,2,2,3,3,4,4,5,5,6,7,8,8,8,8,8,9))
+pack(List.empty)
+pack(List(1,1,2,2,1,1,2,2,1,1,2,2,1,1,2,2,3,3,3,3,1,1,3))
