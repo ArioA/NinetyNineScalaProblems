@@ -286,3 +286,32 @@ def duplicateN[T](num: Int, theList: List[T]) : List[T] = {
 duplicateN(3, List('a','b','c','d'))
 duplicateN(0, List(1,2,3,4,5))
 duplicateN(5, List.empty)
+
+def drop[T](num: Int, theList: List[T]): List[T] = {
+  theList.foldLeft((List.empty[T], 1))((acc, element) => {
+    if(acc._2 == num) {
+      (acc._1, 1)
+    }
+    else {
+      (element :: acc._1, acc._2 + 1)
+    }
+  })._1.reverse
+}
+
+drop(3, List(1,2,3,4,5,6))
+drop(5, List.empty[Char])
+
+def split[T](num: Int, theList: List[T]) : (List[T], List[T]) = {
+  val tripple = theList.foldLeft((List.empty[T], List.empty[T], 0))((acc, element) => {
+    if(acc._3 < num) {
+      (element :: acc._1, acc._2, acc._3 + 1)
+    }
+    else
+      (acc._1, element :: acc._2, acc._3)
+  })
+
+  (tripple._1.reverse, tripple._2.reverse)
+}
+
+split(3, List(1,2,3,4,5,6,7,8))
+
