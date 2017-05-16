@@ -185,3 +185,104 @@ encode(List('a','b','c','d','e'))
 encode(List(1,1,1,2,2,2,3,3,4,4,5,5,6,7,8,8,8,8,8,9))
 encode(List.empty)
 encode(List(1,1,2,2,1,1,2,2,1,1,2,2,1,1,2,2,3,3,3,3,1,1,3))
+
+def encodeModified[T](theList: List[T]) : List[Any] = {
+
+  val packedList : List[List[T]] = pack(theList)
+
+  @tailrec
+  def encodeModifiedTailRec(remainingList : List[List[T]], accList: List[Any]) : List[Any] = {
+    remainingList match {
+      case Nil => accList
+      case head :: tail  if head.length == 1 => encodeModifiedTailRec(tail, head.head :: accList)
+      case head :: tail => encodeModifiedTailRec(tail, (head.length, head.head) :: accList)
+    }
+  }
+
+  encodeModifiedTailRec(packedList, List.empty).reverse
+}
+
+encodeModified(List('a','b','c','d','e'))
+encodeModified(List(1,1,1,2,2,2,3,3,4,4,5,5,6,7,8,8,8,8,8,9))
+encodeModified(List.empty)
+encodeModified(List(1,1,2,2,1,1,2,2,1,1,2,2,1,1,2,2,3,3,3,3,1,1,3))
+
+def decode[T](theList : List[(Int, T)]) : List[T] = {
+
+  @tailrec
+  def decodeTailRec(remainingList : List[(Int, T)], accList: List[T]) : List[T] = {
+    remainingList match {
+      case Nil => accList
+      case (1, element) :: tail => decodeTailRec(tail, element :: accList)
+      case (num, element) :: tail => decodeTailRec((num - 1, element) :: tail, element :: accList)
+    }
+  }
+
+  decodeTailRec(theList, List.empty).reverse
+}
+
+decode(encode(List('a','b','c','d','e')))
+decode(encode(List(1,1,1,2,2,2,3,3,4,4,5,5,6,7,8,8,8,8,8,9)))
+decode(encode(List.empty))
+decode(encode(List(1,1,2,2,1,1,2,2,1,1,2,2,1,1,2,2,3,3,3,3,1,1,3)))
+
+def encodeDirect[T](theList: List[T]) : List[(Int, T)] = {
+
+  if(theList.isEmpty)
+    return List.empty
+
+  @tailrec
+  def encodeDirectTailRec(remainingList: List[T], accList: List[(Int, T)]): List[(Int, T)] = {
+    remainingList match {
+      case Nil => accList
+      case head :: tail if head == accList.head._2 => encodeDirectTailRec(tail, (accList.head._1 + 1, head) :: accList.tail)
+      case head :: tail => encodeDirectTailRec(tail, (1, head) :: accList)
+    }
+  }
+
+  encodeDirectTailRec(theList.tail, List((1, theList.head))).reverse
+}
+
+encodeDirect(List('a','b','c','d','e'))
+encodeDirect(List(1,1,1,2,2,2,3,3,4,4,5,5,6,7,8,8,8,8,8,9))
+encodeDirect(List.empty)
+encodeDirect(List(1,1,2,2,1,1,2,2,1,1,2,2,1,1,2,2,3,3,3,3,1,1,3))
+
+def duplicate[T](theList: List[T]) : List[T] = {
+
+  @tailrec
+  def duplicateTailRec(remainingList: List[T], accList: List[T]): List[T] = {
+    remainingList match {
+      case Nil => accList
+      case head :: tail => duplicateTailRec(tail, head :: head :: accList)
+    }
+  }
+
+  duplicateTailRec(theList, List.empty).reverse
+}
+
+duplicate(List("Silly", "Billy"))
+duplicate(List(1,2,3,4,5))
+duplicate(List.empty)
+duplicate(List('a','b','a','a'))
+
+
+def duplicateN[T](num: Int, theList: List[T]) : List[T] = {
+
+  @tailrec
+  def duplicateNTailRec(countDown: Int, remainingList: List[T], accList: List[T]) : List[T] = {
+    remainingList match {
+      case Nil => accList
+      case head :: tail => countDown match {
+        case 0 => duplicateNTailRec(num, tail, accList)
+        case n => duplicateNTailRec(n-1, remainingList, head :: accList)
+      }
+    }
+  }
+
+  duplicateNTailRec(num, theList, List.empty).reverse
+}
+
+duplicateN(3, List('a','b','c','d'))
+duplicateN(0, List(1,2,3,4,5))
+duplicateN(5, List.empty)
