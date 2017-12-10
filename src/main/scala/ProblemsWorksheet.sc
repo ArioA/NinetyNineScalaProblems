@@ -557,7 +557,6 @@ Draw N random numbers from the set {1, 2, ..., M}
 
 def lotto(numbersToDraw: Int, setSize: Int): List[Int] = randomSelect(numbersToDraw, range(1, setSize))
 
-
 lotto(5, 10)
 lotto(10, 100)
 
@@ -566,9 +565,7 @@ Problem 25 -
 Generate a random permutation of elements of a list
  */
 
-def randomPermute[T](theList: List[T]): List[T] = {
-  randomSelect(theList.length, theList)
-}
+def randomPermute[T](theList: List[T]): List[T] = randomSelect(theList.length, theList)
 
 randomPermute(List('a, 'b, 'c, 'd, 'e))
 
