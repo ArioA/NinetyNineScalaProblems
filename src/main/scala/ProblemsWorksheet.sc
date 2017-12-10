@@ -426,5 +426,32 @@ Rotate N places to the left
  */
 
 def rotate[T](shifts: Int, theList: List[T]): List[T] = {
-  
+  val modShifts: Int = shifts % theList.length
+  val effectiveShifts: Int = if(modShifts < 0) modShifts + theList.length else modShifts
+
+  @tailrec
+  def rotateTailRec(remainingShifts: Int, rotatingList: List[T]): List[T] = {
+    if (remainingShifts == 0) rotatingList
+    else {
+      rotatingList match {
+        case x :: tail => rotateTailRec(remainingShifts - 1, tail :+ x)
+      }
+    }
+  }
+
+  rotateTailRec(effectiveShifts, theList)
+}
+
+rotate(4, List(1,2,3,4,5,6,7,8,9,10))
+rotate(6, List('a','b','c','d','e','f','g','h','i','j'))
+rotate(1000000, List.range(1, 11))
+rotate(-1, List(1,2,3))
+
+/*
+Problem 20 -
+Remove Kth element of a list
+ */
+
+def removeAt[T](removeIndex: Int, theList: List[T]): List[T] = {
+
 }
