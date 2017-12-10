@@ -219,7 +219,11 @@ encode(List(1,1,1,2,2,2,3,3,4,4,5,5,6,7,8,8,8,8,8,9))
 encode(List.empty)
 encode(List(1,1,2,2,1,1,2,2,1,1,2,2,1,1,2,2,3,3,3,3,1,1,3))
 
-
+/*
+Problem 11 -
+Similar to problem 10, except that encoded elements of length 1 are simply
+left as they are in the resulting list.
+ */
 
 def encodeModified[T](theList: List[T]) : List[Any] = {
 
@@ -242,6 +246,11 @@ encodeModified(List(1,1,1,2,2,2,3,3,4,4,5,5,6,7,8,8,8,8,8,9))
 encodeModified(List.empty)
 encodeModified(List(1,1,2,2,1,1,2,2,1,1,2,2,1,1,2,2,3,3,3,3,1,1,3))
 
+/*
+Problem 12 -
+Decodes the list outputted by problem 10
+ */
+
 def decode[T](theList : List[(Int, T)]) : List[T] = {
 
   @tailrec
@@ -260,6 +269,11 @@ decode(encode(List('a','b','c','d','e')))
 decode(encode(List(1,1,1,2,2,2,3,3,4,4,5,5,6,7,8,8,8,8,8,9)))
 decode(encode(List.empty))
 decode(encode(List(1,1,2,2,1,1,2,2,1,1,2,2,1,1,2,2,3,3,3,3,1,1,3)))
+
+/*
+Problem 13 -
+Decodes the list outputted by problem 11
+ */
 
 def encodeDirect[T](theList: List[T]) : List[(Int, T)] = {
 
@@ -283,6 +297,11 @@ encodeDirect(List(1,1,1,2,2,2,3,3,4,4,5,5,6,7,8,8,8,8,8,9))
 encodeDirect(List.empty)
 encodeDirect(List(1,1,2,2,1,1,2,2,1,1,2,2,1,1,2,2,3,3,3,3,1,1,3))
 
+/*
+Problem 14 -
+Duplicates each element of a list.
+ */
+
 def duplicate[T](theList: List[T]) : List[T] = {
 
   @tailrec
@@ -301,6 +320,11 @@ duplicate(List(1,2,3,4,5))
 duplicate(List.empty)
 duplicate(List('a','b','a','a'))
 
+
+/*
+Problem 15 -
+Duplicates each element of a list N times.
+ */
 
 def duplicateN[T](num: Int, theList: List[T]) : List[T] = {
 
@@ -322,6 +346,12 @@ duplicateN(3, List('a','b','c','d'))
 duplicateN(0, List(1,2,3,4,5))
 duplicateN(5, List.empty)
 
+/*
+Problem 16 -
+Drops each Nth element of a list
+Note that we use a 1-indexed convention of dropping - e.g. for N=1 all elements are dropped.
+ */
+
 def drop[T](num: Int, theList: List[T]): List[T] = {
   theList.foldLeft((List.empty[T], 1))((acc, element) => {
     if(acc._2 == num) {
@@ -335,6 +365,12 @@ def drop[T](num: Int, theList: List[T]): List[T] = {
 
 drop(3, List(1,2,3,4,5,6))
 drop(5, List.empty[Char])
+
+/*
+Problem 17 -
+Splits a list into 2 - where the first N elements are placed into the first list,
+and the remaining elements into the other.
+ */
 
 def split[T](num: Int, theList: List[T]) : (List[T], List[T]) = {
   val tripple = theList.foldLeft((List.empty[T], List.empty[T], 0))((acc, element) => {
@@ -350,4 +386,45 @@ def split[T](num: Int, theList: List[T]) : (List[T], List[T]) = {
 
 split(3, List(1,2,3,4,5,6,7,8))
 
+/*
+Problem 18 -
+Extract a slice from a list.
+Given two numbers x, y where x < y,
+return a list of elements of the x to the y indices of the input list.
+ */
 
+def slice[T](lowerIndex: Int, upperIndex: Int, inputList: List[T]): List[T] = {
+
+  if( lowerIndex > upperIndex || lowerIndex < 0 || upperIndex < 0 ) List.empty[T]
+
+  @tailrec
+  def sliceTailRec(counter: Int, inputList: List[T], accList: List[T]): List[T] = {
+    if( counter >= upperIndex || inputList.isEmpty ) accList
+    else if( counter >= lowerIndex) {
+      inputList match {
+        case x :: tail => sliceTailRec(counter + 1, tail, accList :+ x)
+      }
+    }
+    else {
+      inputList match {
+        case _ :: tail => sliceTailRec(counter + 1, tail, accList)
+      }
+    }
+  }
+
+  sliceTailRec(0, inputList, List.empty[T])
+}
+
+slice(0, 3, List(1,2,3,4,5,6,7,8))
+slice(3, 4, List('a', 'b', 'c', 'd', 'e', 'f'))
+slice(4, 4, List('a', 'b', 'c', 'd', 'e', 'f'))
+slice(-1, 0, List(234))
+
+/*
+Problem 19 -
+Rotate N places to the left
+ */
+
+def rotate[T](shifts: Int, theList: List[T]): List[T] = {
+  
+}
