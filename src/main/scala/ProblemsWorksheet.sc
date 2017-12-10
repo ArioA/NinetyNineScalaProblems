@@ -449,23 +449,22 @@ rotate(-1, List(1,2,3))
 
 /*
 Problem 20 -
-Remove Kth element of a list
+Remove Kth element of a list.
+Return the list and the removed element in a Tuple
  */
 
-def removeAt[T](removeIndex: Int, theList: List[T]): List[T] = {
+
+def removeAt[T](removeIndex: Int, theList: List[T]): (List[T], T) = {
 
   @tailrec
-  def removeAtTailRec(counter: Int, inputList: List[T], accList: List[T]): List[T] = {
+  def removeAtTailRec(counter: Int, inputList: List[T], accList: List[T]): (List[T], T) = {
     if( counter == removeIndex ){
       inputList match {
-        case _ :: tail => accList ++ tail
+        case x :: tail => (accList ++ tail, x)
       }
     }
-    else {
-      inputList match {
-        case Nil => accList
-        case x :: tail => removeAtTailRec(counter + 1, tail, accList :+ x)
-      }
+    else inputList match {
+      case x :: tail => removeAtTailRec(counter + 1, tail, accList :+ x)
     }
   }
 
@@ -473,5 +472,103 @@ def removeAt[T](removeIndex: Int, theList: List[T]): List[T] = {
 }
 
 removeAt(0, List(1,2))
-removeAt(25, List('a','b','c'))
+removeAt(2, List('a','b','c'))
 removeAt(4, List.range(0, 10))
+
+/*
+Problem 21 -
+Add an element to a given position in a list
+ */
+
+def insertAt(element: Any, index: Int, theList: List[Any]): List[Any] = {
+
+  if(index > theList.length) return theList :+ element
+  else if( index < 0 ) return List(element) ++ theList
+
+  @tailrec
+  def insertAtTailRec(counter: Int, inputList: List[Any], accList: List[Any]): List[Any] = {
+    if( counter == index ) accList ++ List(element) ++ inputList
+    else {
+      inputList match {
+        case x :: tail => insertAtTailRec(counter + 1, tail, accList :+ x)
+      }
+    }
+  }
+
+  insertAtTailRec(0, theList, List.empty[Any])
+}
+
+insertAt('a, 2, List(1,2,3,4,5))
+insertAt('b, 30, List.range(0,10))
+insertAt('c, -2, List('x, 'y, 'z))
+
+/*
+Problem 22 -
+Create a list of integers within a given range (inclusive)
+ */
+
+def range(lowerRange: Int, upperRange: Int): List[Int] = {
+
+  @tailrec
+  def rangeTailRec(counter: Int, accList: List[Int]): List[Int] = {
+    if( counter <= upperRange ) rangeTailRec(counter + 1, accList :+ counter )
+    else accList
+  }
+
+  rangeTailRec(lowerRange, List.empty[Int])
+}
+
+range(2, 6)
+range(1, 10)
+range(-4, 12)
+
+/*
+Problem 23 -
+Extract a given number of randomly selected elements from a list
+ */
+
+import scala.util.Random
+
+def randomSelect[T](numberToSelect: Int, theList: List[T]): List[T] = {
+  val randomer: Random = new Random()
+
+
+  @tailrec
+  def randomSelectTailRec(noToRemove: Int, remainingList: List[T], accList: List[T]): List[T] = {
+    if(noToRemove == 0) accList
+    else {
+      val indexToRemove: Int = randomer.nextInt(remainingList.length)
+      removeAt(indexToRemove, remainingList) match {
+        case (aList, element) => randomSelectTailRec(noToRemove - 1, aList, accList :+ element)
+      }
+    }
+  }
+
+  randomSelectTailRec(numberToSelect, theList, List.empty[T])
+}
+
+randomSelect(5, List(12,3,4,5,6,7))
+randomSelect(5, List('a,'b,'c,'d,'e,'f,'g,'h,'i,'j,'k))
+
+/*
+Problem 24 -
+Draw N random numbers from the set {1, 2, ..., M}
+ */
+
+def lotto(numbersToDraw: Int, setSize: Int): List[Int] = randomSelect(numbersToDraw, range(1, setSize))
+
+
+lotto(5, 10)
+lotto(10, 100)
+
+/*
+Problem 25 -
+Generate a random permutation of elements of a list
+ */
+
+def randomPermute[T](theList: List[T]): List[T] = {
+  randomSelect(theList.length, theList)
+}
+
+randomPermute(List('a, 'b, 'c, 'd, 'e))
+
