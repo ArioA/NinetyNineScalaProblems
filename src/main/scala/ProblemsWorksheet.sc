@@ -454,4 +454,24 @@ Remove Kth element of a list
 
 def removeAt[T](removeIndex: Int, theList: List[T]): List[T] = {
 
+  @tailrec
+  def removeAtTailRec(counter: Int, inputList: List[T], accList: List[T]): List[T] = {
+    if( counter == removeIndex ){
+      inputList match {
+        case _ :: tail => accList ++ tail
+      }
+    }
+    else {
+      inputList match {
+        case Nil => accList
+        case x :: tail => removeAtTailRec(counter + 1, tail, accList :+ x)
+      }
+    }
+  }
+
+  removeAtTailRec(0, theList, List.empty[T])
 }
+
+removeAt(0, List(1,2))
+removeAt(25, List('a','b','c'))
+removeAt(4, List.range(0, 10))
