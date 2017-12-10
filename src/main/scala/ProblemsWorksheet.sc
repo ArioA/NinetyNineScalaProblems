@@ -97,6 +97,12 @@ reverse(List(1,2,3,4))
 reverse(List())
 reverse(List('a'))
 
+/*
+Problem 6 -
+Returns true if list is in palindrome. False, otherwise.
+
+ */
+
 def isPalindrome[T](theList: List[T]) : Boolean = {
   val reversedList: List[T] = reverse(theList)
   reversedList match {
@@ -107,6 +113,17 @@ def isPalindrome[T](theList: List[T]) : Boolean = {
 
 isPalindrome(List(1, 2, 3, 2, 1))
 isPalindrome(List('a','b','c'))
+isPalindrome(List('l','l'))
+isPalindrome(List('a','l','l','a'))
+isPalindrome(List('l'))
+
+/*
+Problem 7 -
+Flattens a nested list structure.
+Returns a single list, where all nested lists in the input list are
+removed and all elements of those nested lists are in the returned list,
+with their order of preserved.
+ */
 
 def flatten(listOfLists: List[Any]): List[Any] = {
 
@@ -123,6 +140,11 @@ def flatten(listOfLists: List[Any]): List[Any] = {
   }
 
 flatten(List(List(1,2,List(3)),List(4,5,6)))
+
+/*
+Problem 8 -
+Eliminates consecutive elements in the input list.
+ */
 
 def compress[T](theList: List[T]) : List[T] = {
   if(theList.isEmpty)
@@ -145,6 +167,11 @@ compress(List(1,1,1,2,2,2,3,3,4,4,5,5,6,7,8,8,8,8,8,9))
 compress(List.empty)
 compress(List(1,1,2,2,1,1,2,2,1,1,2,2,1,1,2,2,3,3,3,3,1,1,3))
 
+/*
+Problem 9 -
+Pack consecutive duplicates into sub-lists.
+ */
+
 def pack[T](theList: List[T]) : List[List[T]] = {
   if(theList isEmpty)
     return List.empty
@@ -166,6 +193,12 @@ pack(List(1,1,1,2,2,2,3,3,4,4,5,5,6,7,8,8,8,8,8,9))
 pack(List.empty)
 pack(List(1,1,2,2,1,1,2,2,1,1,2,2,1,1,2,2,3,3,3,3,1,1,3))
 
+/*
+Problem 10 -
+Encode consecutive elements of the input list as ( E, N ) tuples where E is the element and
+N is the number of consecutive duplicates of E.
+ */
+
 def encode[T](theList: List[T]) : List[(Int, T)] = {
 
   val packedList : List[List[T]] = pack(theList)
@@ -185,3 +218,5 @@ encode(List('a','b','c','d','e'))
 encode(List(1,1,1,2,2,2,3,3,4,4,5,5,6,7,8,8,8,8,8,9))
 encode(List.empty)
 encode(List(1,1,2,2,1,1,2,2,1,1,2,2,1,1,2,2,3,3,3,3,1,1,3))
+
+
